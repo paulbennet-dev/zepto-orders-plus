@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Zepto (Unofficial) - Orders Plus",
+  "version": "1.3",
+  "description": "Enhance your Zepto orders experience.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [],
+  "host_permissions": [
+    "*://*.zeptonow.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.zeptonow.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}
