@@ -57,3 +57,13 @@ jobs:
           asset_path: dist/zepto-orders-plus.zip
           asset_name: zepto-orders-plus.zip
           asset_content_type: application/zip
+
+  download:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: zepto-orders-plus
