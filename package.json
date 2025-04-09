@@ -4,8 +4,8 @@
   "description": "This is a simple Google Chrome extension. Follow the steps below to load it into Chrome:",
   "main": "background.js",
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch",
+    "build": "npm i && webpack && npm run package",
+    "watch": "npm i && webpack --watch",
     "package": "bash package-extension.sh",
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
