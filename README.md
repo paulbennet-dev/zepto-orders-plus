@@ -43,3 +43,10 @@ Zepto Orders Plus is a Google Chrome extension designed to enhance your experien
 2. Enable "Developer mode" in the top-right corner.
 3. Click "Load unpacked" and select this project's folder.
 4. Open the extension from the browser toolbar and start managing your Zepto orders efficiently.
+
+## Sponsor ❤️
+
+If you find this project helpful and would like to support its development, consider sponsoring or using the referral link below:
+
+1. **GitHub Sponsors**: [Support me on GitHub Sponsors](https://github.com/sponsors/paulbennet-dev) to help maintain and improve this project.
+2. **Zepto Referral**: [Sign up on Zepto](https://zepto-prod.onelink.me/tC90/f5j9mzri) using my referral link to support indirectly while enjoying Zepto's services.

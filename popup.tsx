@@ -174,7 +174,7 @@ const App = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => window.open('https://www.zeptonow.com', '_blank')}
+              onClick={() => window.open('https://zepto-prod.onelink.me/tC90/f5j9mzri', '_blank')}
             >
               Open ZeptoNow
             </Button>
