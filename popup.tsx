@@ -174,7 +174,12 @@ const App = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => window.open('https://zepto-prod.onelink.me/tC90/f5j9mzri', '_blank')}
+              onClick={() =>
+                window.open(
+                  'https://zepto-prod.onelink.me/tC90/f5j9mzri',
+                  '_blank'
+                )
+              }
             >
               Open ZeptoNow
             </Button>
@@ -380,115 +385,126 @@ const App = () => {
     );
   };
 
-  const renderTableBody = () => (
-    <TableBody>
-      {summary?.map((product, index) => {
-        const uniqueSortedDates = Array.from(
-          new Set(product.orderDates.map((date) => new Date(date).getDate()))
-        )
-          .sort((a, b) => a - b)
-          .join(', ');
-        return (
-          <TableRow key={product.name} className="table-row">
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  position: 'relative',
-                }}
-              >
-                <div>
-                  <img
-                    className="product-image"
-                    src={product.imageUrl}
-                    alt={product.name}
-                    style={{
-                      width: '30px',
-                      marginRight: '8px',
-                      verticalAlign: 'middle',
-                      borderRadius: '5px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => handleImageClick(product.imageUrl)}
-                  />
-                </div>
+  const renderTableBody = () => {
+    if (!summary || summary.length === 0) {
+      return (
+        <TableBody>
+          <TableRow>
+            <TableCell
+              colSpan={4}
+              style={{ textAlign: 'center', padding: '16px' }}
+            >
+              No orders to display for the selected month.
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      );
+    }
+
+    return (
+      <TableBody>
+        {summary.map((product, index) => {
+          const uniqueSortedDates = Array.from(
+            new Set(product.orderDates.map((date) => new Date(date).getDate()))
+          )
+            .sort((a, b) => a - b)
+            .join(', ');
+          return (
+            <TableRow key={product.name} className="table-row">
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>
                 <div
                   style={{
-                    maxWidth: '150px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
+                    display: 'flex',
+                    alignItems: 'center',
                     position: 'relative',
                   }}
                 >
-                  <Tooltip title={product.name} placement="top">
-                    <span>{product.name}</span>
-                  </Tooltip>
-                </div>
-                <div
-                  className="copy-icon"
-                  style={{
-                    backgroundColor: 'white',
-                    borderRadius: '50%',
-                    padding: '4px',
-                  }}
-                >
-                  <Tooltip title="Copy to clipboard" placement="top">
-                    <Button
-                      onClick={() =>
-                        navigator.clipboard.writeText(product.name)
-                      }
-                      style={{ minWidth: 'auto', padding: '4px' }}
-                    >
-                      <ContentCopyIcon />
-                    </Button>
-                  </Tooltip>
-                </div>
-              </div>
-            </TableCell>
-            <TableCell style={{ textAlign: 'right' }}>
-              {product.count}
-            </TableCell>
-            <TableCell style={{ textAlign: 'right' }}>
-              {uniqueSortedDates.split(', ').map((date, idx) => (
-                <Tooltip
-                  key={idx}
-                  title={new Date(product.orderDates[idx]).toLocaleString(
-                    'default',
-                    {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    }
-                  )}
-                  placement="top"
-                >
-                  <Chip
-                    label={date}
+                  <div>
+                    <img
+                      className="product-image"
+                      src={product.imageUrl}
+                      alt={product.name}
+                      style={{
+                        width: '30px',
+                        marginRight: '8px',
+                        verticalAlign: 'middle',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => handleImageClick(product.imageUrl)}
+                    />
+                  </div>
+                  <div
                     style={{
-                      margin: '2px',
-                      fontSize: '0.75rem',
-                      height: '20px',
-                      lineHeight: '20px',
+                      maxWidth: '150px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      position: 'relative',
                     }}
-                  />
-                </Tooltip>
-              ))}
-            </TableCell>
-          </TableRow>
-        );
-      }) || (
-        <TableRow>
-          <TableCell colSpan={4} style={{ textAlign: 'center' }}>
-            No data available
-          </TableCell>
-        </TableRow>
-      )}
-    </TableBody>
-  );
+                  >
+                    <Tooltip title={product.name} placement="top">
+                      <span>{product.name}</span>
+                    </Tooltip>
+                  </div>
+                  <div
+                    className="copy-icon"
+                    style={{
+                      backgroundColor: 'white',
+                      borderRadius: '50%',
+                      padding: '4px',
+                    }}
+                  >
+                    <Tooltip title="Copy to clipboard" placement="top">
+                      <Button
+                        onClick={() =>
+                          navigator.clipboard.writeText(product.name)
+                        }
+                        style={{ minWidth: 'auto', padding: '4px' }}
+                      >
+                        <ContentCopyIcon />
+                      </Button>
+                    </Tooltip>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell style={{ textAlign: 'right' }}>
+                {product.count}
+              </TableCell>
+              <TableCell style={{ textAlign: 'right' }}>
+                {uniqueSortedDates.split(', ').map((date, idx) => (
+                  <Tooltip
+                    key={idx}
+                    title={new Date(product.orderDates[idx]).toLocaleString(
+                      'default',
+                      {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      }
+                    )}
+                    placement="top"
+                  >
+                    <Chip
+                      label={date}
+                      style={{
+                        margin: '2px',
+                        fontSize: '0.75rem',
+                        height: '20px',
+                        lineHeight: '20px',
+                      }}
+                    />
+                  </Tooltip>
+                ))}
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    );
+  };
 
   const renderSectionHeader = () => (
     <Box
@@ -543,6 +559,44 @@ const App = () => {
           </Tooltip>
         </ButtonGroup>
       </Box>
+    </Box>
+  );
+
+  const renderFooter = () => (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      padding={2}
+      style={{ marginTop: '16px' }}
+    >
+      <Tooltip title="Support me on GitHub Sponsors" placement="top">
+        <IconButton
+          onClick={() =>
+            window.open('https://github.com/sponsors/paulbennet-dev', '_blank')
+          }
+          style={{ marginRight: '8px' }}
+        >
+          <img
+            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+            alt="GitHub Sponsors"
+            style={{ width: '24px', height: '24px' }}
+          />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Sign up on Zepto using my referral link" placement="top">
+        <IconButton
+          onClick={() =>
+            window.open('https://zepto-prod.onelink.me/tC90/f5j9mzri', '_blank')
+          }
+        >
+          <img
+            src="icon.png"
+            alt="Zepto Referral"
+            style={{ width: '24px', height: '24px' }}
+          />
+        </IconButton>
+      </Tooltip>
     </Box>
   );
 
@@ -694,6 +748,7 @@ const App = () => {
             </Box>
           )}
         </Popover>
+        {renderFooter()}
       </Container>
     </ThemeProvider>
   );
