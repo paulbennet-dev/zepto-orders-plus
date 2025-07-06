@@ -3,6 +3,20 @@
 
 console.log('Content script is loaded');
 
+async function generateSHA256Hex(input) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+const generateRandomUUID = () => "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (e) {
+  let t = Math.random() * 16 | 0;
+  return (e === "x" ? t : (t & 0x3 | 0x8)).toString(16);
+});
+
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'fetchSummary') {
@@ -12,15 +26,34 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     let page = 1;
 
     const fetchOrders = async () => {
+
+      const {
+        deviceID,
+        xsrfToken,
+        csrfSecret
+      } = message.cookies;
+
       try {
         let continueFetching = true;
         while (continueFetching) {
+
+          const requestID = generateRandomUUID();
+          const requestIDHashContent = `undefined|${deviceID}|get|${requestID}|${decodeURIComponent(xsrfToken)}|/api/v2/order/?page_number=${page}`;
+
+          const requestSignature = await generateSHA256Hex(requestIDHashContent);
+          const requestTimezone = await generateSHA256Hex(requestSignature);
+
           const response = await fetch(
             `https://api.zeptonow.com/api/v2/order/?page_number=${page}`,
             {
               headers: {
-                'request-signature':
-                  'chrome-extension-mpjoccodbkaipkldddemmdlladmldooc',
+                "x-csrf-secret": csrfSecret,
+                "x-timezone": requestTimezone,
+                "x-xsrf-token": decodeURIComponent(xsrfToken),
+                'device_id': deviceID,
+                'request_id': requestID,
+                'request-signature': requestSignature,
+                "x-chrome-extension-id": chrome.runtime.id
               },
               credentials: 'include',
             }
